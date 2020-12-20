@@ -54,6 +54,7 @@ def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, filter_type='
 
     # Use lfilter to filter x with the FIR filter.
     filtered_x = lfilter(taps, 1.0, x)
+    wavfile.write(name + '_filtered.wav', samplerate, filtered_x)
 
     # ------------------------------------------------
     # Plot the FIR filter coefficients.
@@ -132,4 +133,4 @@ def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, filter_type='
     return
 
 #linear_FIR_filter('looneyTunes.wav', 2000, -60, (4,5), verbose=True, name='ex4')
-linear_FIR_filter('looneyTunes.wav', [2000, 3000], -40, (4,5), verbose=True, name='ex4', filter_type='bandstop')
+linear_FIR_filter('looneyTunes.wav', [2000, 3000], -40, (4,5), verbose=True, name='ex5', filter_type='bandstop')
