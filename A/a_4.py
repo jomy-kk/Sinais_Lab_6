@@ -6,7 +6,7 @@ from scipy.signal import firwin, freqz, kaiserord, lfilter
 from numpy import log10, unwrap, angle, cos, sin, pi, absolute, arange
 from scipy.io import wavfile
 
-def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, verbose=False, name =''):
+def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, filter_type='', verbose=False, name =''):
     '''
 
     :param wav_signal:
@@ -47,8 +47,10 @@ def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, verbose=False
     # The cutoff frequency of the filter.
     cutoff_hz = cutoff
 
-    # Use firwin with a Kaiser window to create a lowpass FIR filter.
-    taps = firwin(N, cutoff_hz / nyq_rate, window=('kaiser', beta))
+    if filter_type == '': # Use firwin with a Kaiser window to create a lowpass FIR filter.
+        taps = firwin(N, cutoff_hz / nyq_rate, window=('kaiser', beta))
+    else: # Use firwin with a Kaiser window to create another type of FIR filter.
+        taps = firwin(N, [v/nyq_rate for v in cutoff_hz], window=('kaiser', beta), pass_zero=filter_type)
 
     # Use lfilter to filter x with the FIR filter.
     filtered_x = lfilter(taps, 1.0, x)
@@ -59,10 +61,10 @@ def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, verbose=False
 
     fig = plt.figure(1)
     plt.plot(taps, 'bo-', linewidth=2)
-    plt.xlim(2800, 3000)
+    plt.xlim(1730, 1850)
     plt.title('Filter Coefficients (%d taps)' % N)
     plt.grid(True)
-    fig.savefig('results_a4/' + name + '_filter_coefficients.png', bbox_inches='tight')
+    fig.savefig('results_a4/' + name + '_' + filter_type + '_filter_coefficients.png', bbox_inches='tight')
 
     # ------------------------------------------------
     # Plot the magnitude response of the filter.
@@ -76,16 +78,22 @@ def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, verbose=False
     plt.ylabel('Gain')
     plt.title('Frequency Response')
     plt.ylim(-0.05, 1.05)
-    plt.xlim(1993, 2010)
+    plt.xlim(1800, 4000)
     plt.grid(True)
-    fig.savefig('results_a4/' + name + '_frequency_response.png', bbox_inches='tight')
+    fig.savefig('results_a4/' + name + '_' + filter_type + '_frequency_response.png', bbox_inches='tight')
 
     # Upper inset plot.
-    ax1 = plt.axes([0.5, 0.6, .4, .25])
+    ax1 = plt.axes([0.68, 0.6, .2, .25])
     plt.plot((w / pi) * nyq_rate, absolute(h), 'b-', linewidth=2)
-    plt.xlim(2001, 2003)
-    plt.ylim(0, 0.2)
-    #plt.ylim(0.9985, 1.001)
+    plt.xlim(3000, 3010)
+    plt.ylim(0.9, 1.02)
+    plt.grid(True)
+
+    # Down inset plot.
+    ax2 = plt.axes([0.68, 0.2, .2, .25])
+    plt.plot((w / pi) * nyq_rate, absolute(h), 'b-', linewidth=2)
+    plt.xlim(2980, 3000)
+    plt.ylim(-0.02, 0.1)
     plt.grid(True)
 
     # ------------------------------------------------
@@ -116,11 +124,12 @@ def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, verbose=False
     plt.xlabel('Time (s)')
     plt.grid(True)
     plt.subplots_adjust(hspace=0.7)
-    fig.savefig('results_a4/' + name + '_filtered_output.png', bbox_inches='tight')
+    fig.savefig('results_a4/' + name + '_' + filter_type + '_filtered_output.png', bbox_inches='tight')
 
     if verbose:
         plt.show()
 
     return
 
-linear_FIR_filter('looneyTunes.wav', 2000, -60, (4,5), verbose=True, name='ex4')
+#linear_FIR_filter('looneyTunes.wav', 2000, -60, (4,5), verbose=True, name='ex4')
+linear_FIR_filter('looneyTunes.wav', [2000, 3000], -40, (4,5), verbose=True, name='ex4', filter_type='bandstop')
