@@ -29,8 +29,8 @@ def median_filter(signals, samples, sampling_frequency, sampling_time, verbose=F
 
     fig, AX = plt.subplots(len(signals))
     for i in range(len(signals)):
-        AX[i].plot(t, signals[i])
-        AX[i].plot(t, Y[i])
+        AX[i].plot(t, signals[i], '-b')
+        AX[i].plot(t, Y[i], '-g')
         if len(labels):
             AX[i].set_title(labels[i])
 
@@ -46,4 +46,4 @@ sB = loadmat('sin0.mat')['signal']
 sC = loadmat('sin20.mat')['signal']
 
 signals = [np.reshape(sA, sA.size), np.reshape(sB, sB.size), np.reshape(sC, sC.size)]
-median_filter(signals, 3, 200, 2, verbose=True, labels=('Signal A', 'Signal B', 'Signal C'))
+median_filter(signals, 7, 200, 2, verbose=True, labels=('Signal A', 'Signal B', 'Signal C'))
