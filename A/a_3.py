@@ -5,7 +5,7 @@ from scipy.ndimage import median_filter as mf
 import matplotlib.pyplot as plt
 import numpy as np
 
-def median_filter(signals, samples, sampling_frequency, sampling_time, verbose):
+def median_filter(signals, samples, sampling_frequency, sampling_time, verbose=False, labels=()):
     '''
     Applied the median filter to one or more signals.
     :param signals: One or list of 2+ Ndarrays of signals
@@ -15,11 +15,10 @@ def median_filter(signals, samples, sampling_frequency, sampling_time, verbose):
 
     (Optionals)
     :param verbose: if True, prints the variances
+    :param labels: if given, the plots will be tittled with them
 
     :return: Nothing
     '''
-    #sampling_rate = 200 #Hz
-    #samples = 3 #
 
     t = np.linspace(0, sampling_time, sampling_frequency, endpoint=False)
 
@@ -29,10 +28,13 @@ def median_filter(signals, samples, sampling_frequency, sampling_time, verbose):
         Y.append(y)
 
     fig, AX = plt.subplots(len(signals))
-    fig.suptitle('Isto está a fazer algo')
     for i in range(len(signals)):
         AX[i].plot(t, signals[i])
         AX[i].plot(t, Y[i])
+        if len(labels):
+            AX[i].set_title(labels[i])
+
+    plt.subplots_adjust(hspace=1)
     fig.savefig('results_a3/Median Filters (S=' + str(samples) + ').png', bbox_inches='tight')
     if verbose:
         plt.show()
@@ -44,4 +46,4 @@ sB = loadmat('sin0.mat')['signal']
 sC = loadmat('sin20.mat')['signal']
 
 signals = [np.reshape(sA, sA.size), np.reshape(sB, sB.size), np.reshape(sC, sC.size)]
-median_filter(signals, 3, 200, 2, verbose=True)
+median_filter(signals, 3, 200, 2, verbose=True, labels=('Signal A', 'Signal B', 'Signal C'))
