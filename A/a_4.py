@@ -1,9 +1,6 @@
-from scipy.io import loadmat
-from scipy.ndimage import median_filter as mf
 import matplotlib.pyplot as plt
-import numpy as np
 from scipy.signal import firwin, freqz, kaiserord, lfilter
-from numpy import log10, unwrap, angle, cos, sin, pi, absolute, arange
+from numpy import pi, absolute, arange
 from scipy.io import wavfile
 
 def linear_FIR_filter(wav_file_path, cutoff, slope, plot_interval, filter_type='', verbose=False, name =''):
