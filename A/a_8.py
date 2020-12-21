@@ -9,7 +9,7 @@ def scipy_medfilt(wav_file_path, samples, plot_interval, verbose=False, name =''
     nsamples = x.size
     t = arange(nsamples) / samplerate
     filtered_x = medfilt(x, samples)
-    wavfile.write(name + '_scipy_medfilt_' + str(samples) +'samples.wav', samplerate, filtered_x)
+    wavfile.write(name + '_scipy_medfilt_' + str(samples) +'samples.filtered_wav', samplerate, filtered_x)
 
     fig = plt.figure()
     plt.subplot(2, 1, 1)
@@ -40,11 +40,11 @@ def scipy_medfilt(wav_file_path, samples, plot_interval, verbose=False, name =''
     return
 
 '''
-scipy_medfilt('tune_sapn.wav', 3, [2,2.3], verbose=True, name='ex8')
-scipy_medfilt('tune_sapn.wav', 3, [2.5,3.5], verbose=True, name='ex8')
+scipy_medfilt('tune_sapn.filtered_wav', 3, [2,2.3], verbose=True, name='ex8')
+scipy_medfilt('tune_sapn.filtered_wav', 3, [2.5,3.5], verbose=True, name='ex8')
 
-scipy_medfilt('tune_sapn.wav', 5, [2,2.3], verbose=True, name='ex8')
-scipy_medfilt('tune_sapn.wav', 5, [2.5,3.5], verbose=True, name='ex8')
+scipy_medfilt('tune_sapn.filtered_wav', 5, [2,2.3], verbose=True, name='ex8')
+scipy_medfilt('tune_sapn.filtered_wav', 5, [2.5,3.5], verbose=True, name='ex8')
 '''
 
 
@@ -80,7 +80,7 @@ def my_median_filter(wav_file_path, samples, plot_interval, verbose=False, name 
 
         temp = []
 
-    wavfile.write(name + '_my_medfilt_' + str(samples) + 'samples.wav', samplerate, data_final)
+    wavfile.write(name + '_my_medfilt_' + str(samples) + 'samples.filtered_wav', samplerate, data_final)
 
     fig = plt.figure()
     plt.subplot(2, 1, 1)
@@ -111,10 +111,10 @@ def my_median_filter(wav_file_path, samples, plot_interval, verbose=False, name 
 
     return
 '''
-my_median_filter('tune_sapn.wav', 3, [2,2.3], verbose=True, name='ex8')
-my_median_filter('tune_sapn.wav', 3, [2.5,3.5], verbose=True, name='ex8')
-my_median_filter('tune_sapn.wav', 7, [2,2.3], verbose=True, name='ex8')
-my_median_filter('tune_sapn.wav', 7, [2.5,3.5], verbose=True, name='ex8')
+my_median_filter('tune_sapn.filtered_wav', 3, [2,2.3], verbose=True, name='ex8')
+my_median_filter('tune_sapn.filtered_wav', 3, [2.5,3.5], verbose=True, name='ex8')
+my_median_filter('tune_sapn.filtered_wav', 7, [2,2.3], verbose=True, name='ex8')
+my_median_filter('tune_sapn.filtered_wav', 7, [2.5,3.5], verbose=True, name='ex8')
 '''
 
 from scipy.fftpack import fft
@@ -144,17 +144,17 @@ def filtered_results_stats(signal, verbose=False, name=''):
     if verbose:
         print('THD =', thd, end='\n\n')
 
-samplerate, signal = wavfile.read('tune_sapn.wav')
-filtered_results_stats(signal, True, 'Original tune_sapn.wav')
+samplerate, signal = wavfile.read('tune_sapn.filtered_wav')
+filtered_results_stats(signal, True, 'Original tune_sapn.filtered_wav')
 
-samplerate, signal = wavfile.read('ex8_my_medfilt_3samples.wav')
-filtered_results_stats(signal, True, 'ex8_my_medfilt_3samples.wav')
+samplerate, signal = wavfile.read('tmy_3.filtered_wav')
+filtered_results_stats(signal, True, 'tmy_3.filtered_wav')
 
-samplerate, signal = wavfile.read('ex8_my_medfilt_7samples.wav')
-filtered_results_stats(signal, True, 'ex8_my_medfilt_7samples.wav')
+samplerate, signal = wavfile.read('tmy_7.filtered_wav')
+filtered_results_stats(signal, True, 'tmy_7.filtered_wav')
 
-samplerate, signal = wavfile.read('ex8_scipy_medfilt_3samples.wav')
-filtered_results_stats(signal, True, 'ex8_scipy_medfilt_3samples.wav')
+samplerate, signal = wavfile.read('t_3.filtered_wav')
+filtered_results_stats(signal, True, 't_3.filtered_wav')
 
-samplerate, signal = wavfile.read('ex8_scipy_medfilt_5samples.wav')
-filtered_results_stats(signal, True, 'ex8_scipy_medfilt_5samples.wav')
+samplerate, signal = wavfile.read('t_5.filtered_wav')
+filtered_results_stats(signal, True, 't_5.filtered_wav')

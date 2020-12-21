@@ -34,7 +34,7 @@ def highPassIIRellip(wav_file_path, plot_interval, verbose=False):
 
     # Apply filtfilt to signal
     filtered_x = lfilter(b, a, x)
-    wavfile.write('ex6_ellip_filtered.wav', samplerate, filtered_x)
+    wavfile.write('looneytunes_IIR_HP_6K.filtered_wav', samplerate, filtered_x)
 
     fig = plt.figure()
     # Plot the original signal.
@@ -61,7 +61,7 @@ def highPassIIRellip(wav_file_path, plot_interval, verbose=False):
 
 
 # HP IIR filter using ellip
-highPassIIRellip('looneyTunes.wav', plot_interval=(4,5), verbose=True)
+highPassIIRellip('looneyTunes.filtered_wav', plot_interval=(4,5), verbose=True)
 
 
 def bandRejectIIRchebyI(wav_file_path, plot_interval, verbose=False):
@@ -93,7 +93,7 @@ def bandRejectIIRchebyI(wav_file_path, plot_interval, verbose=False):
 
     # Apply filtfilt to signal
     filtered_x = lfilter(b, a, x)
-    wavfile.write('ex6_chebyI_filtered.wav', samplerate, filtered_x)
+    wavfile.write('looneytunes_IIR_BR_55-65K.filtered_wav', samplerate, filtered_x)
 
     fig = plt.figure()
     # Plot the original signal.
@@ -119,4 +119,4 @@ def bandRejectIIRchebyI(wav_file_path, plot_interval, verbose=False):
         plt.show()
 
 
-bandRejectIIRchebyI('looneyTunes.wav', plot_interval=(4,5), verbose=True)
+bandRejectIIRchebyI('looneyTunes.filtered_wav', plot_interval=(4,5), verbose=True)
