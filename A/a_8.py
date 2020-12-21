@@ -39,12 +39,13 @@ def scipy_medfilt(wav_file_path, samples, plot_interval, verbose=False, name =''
 
     return
 
+'''
 scipy_medfilt('tune_sapn.wav', 3, [2,2.3], verbose=True, name='ex8')
 scipy_medfilt('tune_sapn.wav', 3, [2.5,3.5], verbose=True, name='ex8')
 
 scipy_medfilt('tune_sapn.wav', 5, [2,2.3], verbose=True, name='ex8')
 scipy_medfilt('tune_sapn.wav', 5, [2.5,3.5], verbose=True, name='ex8')
-
+'''
 
 
 
@@ -109,8 +110,51 @@ def my_median_filter(wav_file_path, samples, plot_interval, verbose=False, name 
         plt.show()
 
     return
-
+'''
 my_median_filter('tune_sapn.wav', 3, [2,2.3], verbose=True, name='ex8')
 my_median_filter('tune_sapn.wav', 3, [2.5,3.5], verbose=True, name='ex8')
 my_median_filter('tune_sapn.wav', 7, [2,2.3], verbose=True, name='ex8')
 my_median_filter('tune_sapn.wav', 7, [2.5,3.5], verbose=True, name='ex8')
+'''
+
+from scipy.fftpack import fft
+from numpy import abs, asanyarray, where, log10
+def filtered_results_stats(signal, verbose=False, name=''):
+    if verbose:
+        print('Results of', name)
+
+    # Noise
+    a = signal
+    a = asanyarray(a)
+    m = a.mean(0)
+    sd = a.std(axis=0, ddof=0)
+    snr = where(sd == 0, 0, m / sd)
+    if verbose:
+        print('SNR =', snr)
+
+    # Distortion
+    sq_sum = 0.0
+    abs_data = abs(fft(signal))
+    for r in range(len(abs_data)):
+        sq_sum = sq_sum + (abs_data[r]) ** 2
+
+    sq_harmonics = sq_sum - (max(abs_data)) ** 2.0
+    thd = 100 * sq_harmonics ** 0.5 / max(abs_data)
+
+    if verbose:
+        print('THD =', thd, end='\n\n')
+
+samplerate, signal = wavfile.read('tune_sapn.wav')
+filtered_results_stats(signal, True, 'Original tune_sapn.wav')
+
+samplerate, signal = wavfile.read('ex8_my_medfilt_3samples.wav')
+filtered_results_stats(signal, True, 'ex8_my_medfilt_3samples.wav')
+
+samplerate, signal = wavfile.read('ex8_my_medfilt_7samples.wav')
+filtered_results_stats(signal, True, 'ex8_my_medfilt_7samples.wav')
+
+samplerate, signal = wavfile.read('ex8_scipy_medfilt_3samples.wav')
+filtered_results_stats(signal, True, 'ex8_scipy_medfilt_3samples.wav')
+
+samplerate, signal = wavfile.read('ex8_scipy_medfilt_5samples.wav')
+filtered_results_stats(signal, True, 'ex8_scipy_medfilt_5samples.wav')
