@@ -93,8 +93,7 @@ def my_median_filter(signal, samples, origin, sampling_frequency, sampling_time,
     plt.plot(t, data_final, '-g')
 
     plt.subplots_adjust(hspace=1)
-    fig.savefig(path_to_save + '/Median Filters (S=' + str(samples) + ' - ' + origin + ' ' + str(samples
-                                                                                                 ) + ').png',  bbox_inches='tight')
+    fig.savefig(path_to_save + '/My Median Filter (S=' + str(samples) + ' - ' + origin + ' ' + str(samples) + ').png',  bbox_inches='tight')
     if verbose:
         plt.show()
 
@@ -161,7 +160,7 @@ median_filter(signals, 7, 'right', 200, 2, verbose=True, labels=('Signal A', 'Si
 '''sA = loadmat('sin-3.mat')['signal']
 my_median_filter(np.reshape(sA, sA.size), 7, 'center', 200, 2, verbose=True, path_to_save='results_a3')
 '''
-
+'''
 sA = loadmat('sin-3.mat')['signal']
 sB = loadmat('sin0.mat')['signal']
 sC = loadmat('sin20.mat')['signal']
@@ -169,3 +168,55 @@ sC = loadmat('sin20.mat')['signal']
 signals = [np.reshape(sA, sA.size), np.reshape(sB, sB.size), np.reshape(sC, sC.size)]
 my_median_filter_multiple(signals, 3, 'left', 200, 2, verbose=True, labels=('Signal A', 'Signal B', 'Signal C'))
 my_median_filter_multiple(signals, 7, 'left', 200, 2, verbose=True, labels=('Signal A', 'Signal B', 'Signal C'))
+'''
+
+def my_median_filter_optimized(signal, samples, origin, sampling_frequency, sampling_time, verbose=False):
+
+    assert origin in ('center', 'left', 'right'), "Please give an origin to thw window: 'center', 'left', 'right'."
+    assert samples%2 == 1, "Number of samples for the window size must be odd."
+
+    if origin == 'center':
+        shift = samples//2
+    if origin == 'left':
+        shift = +(samples-1)
+    if origin == 'right':
+        shift = -(samples-1)
+
+    data_final = np.zeros(signal.shape)
+    temp = []
+
+    # Populate window in temp for the first time
+    for z in range(samples):
+        indexer = z - shift
+        if indexer < 0:
+            temp.append(signal[0])
+        else:
+            temp.append(signal[indexer])
+
+    for i in range(1, len(signal)):
+        # Sort the samples inside the window
+        temp_sorted = temp.copy()
+        temp_sorted.sort()
+        # The result is the middle sample of the sorted window
+        data_final[i] = temp_sorted[len(temp_sorted) // 2]
+        # Shit right of the window
+        if i > signal.size - 1:
+            temp = temp[1:]
+            temp.append(signal[signal.size - 1])
+        else:
+            temp = temp[1:]
+            temp.append(signal[i])
+
+    fig = plt.figure()
+    t = np.linspace(0, sampling_time, sampling_frequency, endpoint=False)
+    plt.plot(t, signal, '-b')
+    plt.plot(t, data_final, '-g')
+
+    if verbose:
+        plt.show()
+
+    return
+
+sA = loadmat('sin-3.mat')['signal']
+my_median_filter(np.reshape(sA, sA.size), 7, 'center', 200, 2, verbose=True)
+my_median_filter_optimized(np.reshape(sA, sA.size), 7, 'center', 200, 2, verbose=True)
