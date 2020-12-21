@@ -64,7 +64,7 @@ def highPassIIRellip(wav_file_path, plot_interval, verbose=False):
 highPassIIRellip('looneyTunes.wav', plot_interval=(4,5), verbose=True)
 
 
-def bandPassIIRchebyI(wav_file_path, plot_interval, verbose=False):
+def bandRejectIIRchebyI(wav_file_path, plot_interval, verbose=False):
     # ------------------------------------------------
     # Create a signal.
     # ------------------------------------------------
@@ -77,8 +77,8 @@ def bandPassIIRchebyI(wav_file_path, plot_interval, verbose=False):
     # Create a IIR filter and apply it to x.
     # ------------------------------------------------
 
-    N, Wn = cheb1ord(wp=[0.55, 0.65], ws= [0.5, 0.7], gstop=80, gpass=1)
-    b, a = cheby1(N, 1, Wn, btype='bandpass')
+    N, Wn = cheb1ord(ws=[0.55, 0.65], wp= [0.5, 0.7], gstop=80, gpass=1)
+    b, a = cheby1(N, 1, Wn, btype='bandstop')
     w, h = freqz(b, a, fs=200000)
 
     fig = plt.figure()
@@ -119,4 +119,4 @@ def bandPassIIRchebyI(wav_file_path, plot_interval, verbose=False):
         plt.show()
 
 
-bandPassIIRchebyI('looneyTunes.wav', plot_interval=(4,5), verbose=True)
+bandRejectIIRchebyI('looneyTunes.wav', plot_interval=(4,5), verbose=True)
